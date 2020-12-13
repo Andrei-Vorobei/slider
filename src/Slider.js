@@ -20,6 +20,11 @@ const Slider = () => {
 
 		const sliderWidth = parseInt(window.getComputedStyle(sliderWindow).width);
 		setSliderWidth(sliderWidth);
+		
+		window.addEventListener('resize', () => {
+			const sliderWidth = parseInt(window.getComputedStyle(sliderWindow).width);
+			setSliderWidth(sliderWidth);
+		});
 	}, []);
 	
 	useEffect(() => {
