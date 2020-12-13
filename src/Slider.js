@@ -21,16 +21,42 @@ const Slider = () => {
 		const sliderWidth = parseInt(window.getComputedStyle(sliderWindow).width);
 		setSliderWidth(sliderWidth);
 
-		setDots(renderDots(slides));
+		// setDots(renderDots(slides, slideIndex));
 	}, []);
 	
 	useEffect(() => {
-		
-		slides && setSlidesWidth();
 		sliderTrack && setSliderTrackWidth();
-
+		slides && setSlidesWidth();
+		
 		sliderTrack && switchSlider();
 	});
+	
+	useEffect(() => {
+		slides && setDots(renderDots(slides, slideIndex));
+	}, [slideIndex, slides]);
+
+	function renderDots(slides, slideIndex) {
+		const dots = [];
+
+		for (let i = 0; i < slides.length; i++) {
+			let cls = 'slider-dot';
+
+			if (i === slideIndex) {
+				cls += ' active';
+			}
+
+			dots.push(
+				<li 
+					key={i}
+					className={cls}
+					onClick={() => setSlideIndex(i)}>
+					{i + 1}
+				</li>
+			)
+		}
+
+		return dots;
+	}
 
 	function switchSlider() {
 		sliderTrack.style.transform = `translateX(-${slideIndex * sliderWidth}px)`;
@@ -44,23 +70,6 @@ const Slider = () => {
 
 	function setSliderTrackWidth() {
 		sliderTrack.style.width = `${sliderWidth * slides.length}px`;
-	}
-
-	function renderDots(slides) {
-		const dots = [];
-
-		slides.forEach((slide, i) => {
-			dots.push(
-				<li 
-					key={i}
-					className="slider-dot"
-					onClick={() => setSlideIndex(i)}>
-					{i + 1}
-				</li>
-			)
-		});
-
-		return dots;
 	}
 
 	function btnHandler(n) {
